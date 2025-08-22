@@ -103,13 +103,14 @@ Create a `.env` file in the root directory with the following variables:
 # Azure OpenAI Configuration
 AZURE_OPENAI_ENDPOINT=your_azure_openai_endpoint
 AZURE_OPENAI_DEPLOYMENT_NAME=your_deployment_name
-AZURE_OPENAI_API_VERSION=2025-01-01-preview
+AZURE_OPENAI_API_VERSION=2024-12-01-preview
+AZURE_OPENAI_API_KEY=your_azure_openai_api_key
 
-# Azure AI Project Configuration
-AZURE_SUBSCRIPTION_ID=your_subscription_id
-AZURE_AI_PROJECT_NAME=your_project_name
-AZURE_OPENAI_SERVICE=your_openai_service_name
-AZURE_OPENAI_RESOURCE_GROUP=your_resource_group
+# Azure AI Project Configuration (Optional - comment out if not using)
+#AZURE_AI_SUBSCRIPTION_ID=your_subscription_id
+#AZURE_AI_PROJECT_NAME=your_project_name
+#AZURE_AI_RESOURCE_GROUP=your_resource_group
+#AZURE_AI_AGENT_ENDPOINT=https://your-project.services.ai.azure.com/api/projects/your-project-name
 
 # For RAG Examples (Optional)
 AZURE_SEARCH_SERVICE_ENDPOINT=your_search_endpoint
@@ -122,14 +123,25 @@ AZURE_OPENAI_CHAT_DEPLOYMENT_NAME=gpt-4o
 
 ### Authentication Setup
 
-This workshop uses **keyless authentication** with Azure AD for enhanced security:
+This workshop supports both **API key authentication** and **keyless authentication** with Azure AD:
+
+#### Option 1: API Key Authentication (Recommended for workshops)
+
+Add your Azure OpenAI API key to the `.env` file:
+```env
+AZURE_OPENAI_API_KEY=your_azure_openai_api_key
+```
+
+#### Option 2: Keyless Authentication with Azure AD
 
 1. **Sign in to Azure:**
+
 ```bash
 az login --use-device-code
 ```
 
 2. **Select your subscription:**
+
 ```bash
 az account set --subscription "Your Subscription Name"
 ```
