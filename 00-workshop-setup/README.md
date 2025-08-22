@@ -26,28 +26,30 @@ ls -la
 
 ## Running the Code
 
-This course offers a series of Jupyter Notebooks that you can run with to get hands-on experience building AI Agents.
+This course offers a series of Jupyter Notebooks that you can run to get hands-on experience building AI Agents using the **Semantic Kernel Framework** with **Azure OpenAI**.
 
-The code samples use either:
+### Workshop Lessons
 
-**Requires GitHub Account - Free**:
+The workshop includes the following lessons:
 
-1) Semantic Kernel Agent Framework + GitHub Models Marketplace. Labelled as (semantic-kernel.ipynb)
-2) AutoGen Framework + GitHub Models Marketplace. Labeled as (autogen.ipynb)
+1. **01-intro-to-ai-agents** - Introduction to Semantic Kernel and basic agent creation
+2. **02-tool-use** - Using tools and function calling with agents
+3. **03-agentic-rag** - Retrieval-Augmented Generation with ChromaDB
+4. **04-system-message-framework** - System message frameworks and agent instructions
+5. **05-planning-design** - Agent planning and design patterns
+6. **06-multi-agent** - Multi-agent systems and coordination
+7. **07-metacognition** - Agent metacognition and self-reflection
+8. **08-use-agent-tools-with-mslearn-mcp** - Using Microsoft Learn documentation via MCP
+9. **09-use-agent-tools-with-custom-mcp** - Creating custom MCP servers
 
-**Requires Azure Subscription**:
-3) Azure AI Foundry + Azure AI Agent Service. Labelled as (azureaiagent.ipynb)
-
-We encourage you to try out all three types of examples to see which one works best for you.
-
-Whichever option you choose, it will determine which setup steps you need to follow below:
+All examples use **Azure OpenAI Service** for the language models and **Semantic Kernel** as the AI agent framework.
 
 ## Requirements
 
 - Python 3.12+
-  - **NOTE**: If you don't have Python3.12 installed, ensure you install it.  Then create your venv using python3.12 to ensure the correct versions are installed from the requirements.txt file.
-- Azure Subscription - For Access to Azure AI Foundry
-- Azure AI Foundry Account - For Access to the Azure AI Agent Service
+  - **NOTE**: If you don't have Python3.12 installed, ensure you install it. Then create your venv using python3.12 to ensure the correct versions are installed from the requirements.txt file.
+- Azure Subscription - For Access to Azure OpenAI Service
+- Azure OpenAI Service - For Language Model Access
 
 We have included a `requirements.txt` file in the root of this repository that contains all the required Python packages to run the code samples.
 
@@ -56,99 +58,105 @@ You can install them by running the following command in your terminal at the ro
 ```bash
 pip install -r requirements.txt
 ```
+
 We recommend creating a Python virtual environment to avoid any conflicts and issues.
 
 ## Setup VSCode
+
 Make sure that you are using the right version of Python in VSCode.
 
 ![image](./images/python-in-vscode.png)
 
-## Azure OpenAI Service
+## Azure OpenAI Service Setup
+
+To run the notebooks in this workshop, you'll need to set up Azure OpenAI Service:
+
 - Create an Azure OpenAI resource in the Azure portal
-- Deploy a GPT-4o model
+- Deploy a GPT-4o or GPT-4o-mini model
 - Note your endpoint and deployment name
+- Get your API key for authentication
 
-## Azure AI Foundry Project
-- Navigate to Azure AI Foundry
-- Create a new AI Project
-- Note your project details (subscription, resource group, project name)
+## Environment Configuration
 
-### Retrieve Your Azure Project Endpoint
+### Create Your `.env` File
 
-
-Follow the steps to creating a hub and project in Azure AI Foundry found here: [Hub resources overview](https://learn.microsoft.com/en-us/azure/ai-foundry/concepts/ai-resources)
-
-
-Once you have created your project, you will need to retrieve the connection string for your project.
-
-This can be done by going to the **Overview** page of your project in the Azure AI Foundry portal.
-
-![Project Connection String](./images/project-endpoint.png)
-
-### Step 2: Create Your `.env` File
-
-To create your `.env` file run the following command in your terminal.
+To create your `.env` file run the following command in your terminal at the root of the repository:
 
 ```bash
 cp .env.example .env
 ```
 
-This will copy the example file and create a `.env` in your directory and where you fill in the values for the environment variables.
+This will copy the example file and create a `.env` in your directory where you can fill in the values for the environment variables.
 
-With your token copied, open the `.env` file in your favorite text editor and paste your token into the `PROJECT_ENDPOINT` field.
+### Required Environment Variables
 
-### Step 3: Sign in to Azure
+Open the `.env` file in your favorite text editor and fill in these required values:
 
-As a security best practice, we'll use [keyless authentication](https://learn.microsoft.com/azure/developer/ai/keyless-connections?tabs=csharp%2Cazure-cli?WT.mc_id=academic-105485-koreyst) to authenticate to Azure OpenAI with Microsoft Entra ID. 
+```bash
+# Azure OpenAI settings (Required for all notebooks)
+AZURE_OPENAI_ENDPOINT=https://your-openai.openai.azure.com/
+AZURE_OPENAI_DEPLOYMENT_NAME=gpt-4o
+AZURE_OPENAI_API_VERSION=2024-12-01-preview
+AZURE_OPENAI_API_KEY=your-azure-openai-api-key
+```
 
-Next, open a terminal and run `az login --use-device-code` to sign in to your Azure account.
+### Optional: Azure AD Authentication
 
-Once you've logged in, select your subscription in the terminal.
+As a security best practice, you can use [keyless authentication](https://learn.microsoft.com/azure/developer/ai/keyless-connections?tabs=csharp%2Cazure-cli?WT.mc_id=academic-105485-koreyst) to authenticate to Azure OpenAI with Microsoft Entra ID.
 
-## Additional Environment Variables - Azure Search and Azure OpenAI 
+To use Azure AD authentication:
 
-For the Agentic RAG Lesson - Lesson 5 - there are samples that use Azure Search and Azure OpenAI.
+1. Open a terminal and run `az login --use-device-code` to sign in to your Azure account
+2. Select your subscription in the terminal
+3. Comment out the `AZURE_OPENAI_API_KEY` line in your `.env` file
+4. The notebooks will automatically use Azure AD authentication
 
-If you want to run these samples, you will need to add the following environment variables to your `.env` file:
+### Additional Setup for Specific Lessons
 
-### Overview Page (Project)
+#### Lesson 03 - Agentic RAG with ChromaDB
 
-- `AZURE_SUBSCRIPTION_ID` - Check **Project details** on the **Overview** page of your project.
+This lesson uses ChromaDB for vector storage. If you encounter SQLite version issues:
 
-- `AZURE_AI_PROJECT_NAME` - Look at the top of the **Overview** page for your project.
+```bash
+pip install pysqlite3-binary
+```
 
-- `AZURE_OPENAI_SERVICE` - Find this in the **Included capabilities** tab for **Azure OpenAI Service** on the **Overview** page.
-
-### Management Center
-
-- `AZURE_OPENAI_RESOURCE_GROUP` - Go to **Project properties** on the **Overview** page of the **Management Center**.
-
-- `GLOBAL_LLM_SERVICE` - Under **Connected resources**, find the **Azure AI Services** connection name. If not listed, check the **Azure portal** under your resource group for the AI Services resource name.
-
-### Models + Endpoints Page
-
-- `AZURE_OPENAI_EMBEDDING_DEPLOYMENT_NAME` - Select your embedding model (e.g., `text-embedding-ada-002`) and note the **Deployment name** from the model details.
-
-- `AZURE_OPENAI_CHAT_DEPLOYMENT_NAME` - Select your chat model (e.g., `gpt-4o-mini`) and note the **Deployment name** from the model details.
-
-### Azure Portal
-
-- `AZURE_OPENAI_ENDPOINT` - Look for **Azure AI services**, click on it, then go to **Resource Management**, **Keys and Endpoint**, scroll down to the "Azure OpenAI endpoints", and copy the one that says "Language APIs".
-
-- `AZURE_OPENAI_API_KEY` - From the same screen, copy KEY 1 or KEY 2.
-
-- `AZURE_SEARCH_SERVICE_ENDPOINT` - Find your **Azure AI Search** resource, click it, and see **Overview**.
-
-- `AZURE_SEARCH_API_KEY` - Then go to **Settings** and then **Keys** to copy the primary or secondary admin key.
-
-### External Webpage
-
-- `AZURE_OPENAI_API_VERSION` - Visit the [API version lifecycle](https://learn.microsoft.com/en-us/azure/ai-services/openai/api-version-deprecation#latest-ga-api-release) page under **Latest GA API release**.
-
-### Setup keyless authentication
-
-Rather than hardcode your credentials, we'll use a keyless connection with Azure OpenAI. To do so, we'll import `DefaultAzureCredential` and later call the `DefaultAzureCredential` function to get the credential.
+And add this code at the start of the notebook:
 
 ```python
-from azure.identity import DefaultAzureCredential, InteractiveBrowserCredential
+import sys
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 ```
+
+#### Lessons 08-09 - MCP (Model Context Protocol)
+
+These lessons demonstrate connecting to external tools via MCP. No additional setup is required as they use HTTP-based MCP servers.
+
+## Python Virtual Environment Setup
+
+We strongly recommend creating a Python virtual environment:
+
+```bash
+# Create virtual environment
+python3.12 -m venv ai-agents-env
+
+# Activate virtual environment
+# On macOS/Linux:
+source ai-agents-env/bin/activate
+# On Windows:
+ai-agents-env\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+```
+
+## Getting Started
+
+Once you have completed the setup:
+
+1. Navigate to the lesson you want to start with (e.g., `01-intro-to-ai-agents/notebook/`)
+2. Open the Jupyter notebook in VS Code
+3. Select your Python environment/kernel
+4. Run the cells to start building AI agents!
+
+Each lesson builds upon the previous one, so we recommend starting with lesson 01 and working through them sequentially.
