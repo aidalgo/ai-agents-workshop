@@ -1,0 +1,7 @@
+python-dotenv>=1.1.1
+azure-identity>=1.24.0
+semantic-kernel[mcp]>=1.35.3
+semantic-kernel[azure]>=1.35.3
+mcp[cli]
+ipykernel>=6.30.1
+IPython>=8.0.0
